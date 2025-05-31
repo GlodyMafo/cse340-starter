@@ -20,21 +20,15 @@ app.set("view engine", "ejs")
 app.use(expressLayouts)
 app.set("layout", "./layouts/layout") // not at views root
 
-
 app.get("/", baseController.buildHome)
-
-// app.use(async (req, res, next) => {
-//   next({status: 404, message: 'Sorry, we appear to have lost that page.'})
-// })
 
 app.use(static)
 
 
-
 /* ***********************
- * Local Server Information
- * Values from .env (environment) file
- *************************/
+* Express Error Handler
+* Place after all other middleware
+*************************/
 app.use(async (err, req, res, next) => {
   let nav = await utilities.getNav()
   console.error(`Error at: "${req.originalUrl}": ${err.message}`)
@@ -44,6 +38,14 @@ app.use(async (err, req, res, next) => {
     nav
   })
 })
+
+
+
+/* ***********************
+ * Local Server Information
+ * Values from .env (environment) file
+ *************************/
+
 
 const port = process.env.PORT
 const host = process.env.HOST
