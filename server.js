@@ -12,8 +12,8 @@ const app = express()
 const static = require("./routes/static")
 const baseController = require("./controllers/baseController")
 const inventoryRoute = require("./routes/inventoryRoute") 
-// Inventory routes
-app.use("/inv", inventoryRoute)
+const utilities = require("./utilities/")
+
 
 /* ***********************
  * View Engine and Templates
@@ -23,7 +23,22 @@ app.set("view engine", "ejs")
 app.use(expressLayouts)
 app.set("layout", "./layouts/layout") // not at views root
 
+/* Middleware pour injecter `nav` dans res.locals */
+app.use(async (req, res, next) => {
+  try {
+    const nav = await utilities.getNav()
+    res.locals.nav = nav
+    next()
+  } catch (err) {
+    next(err)
+  }
+})
+
 app.get("/", baseController.buildHome)
+app.use("/inv", inventoryRoute)
+
+
+
 
 app.use(static)
 
@@ -32,15 +47,21 @@ app.use(static)
 * Express Error Handler
 * Place after all other middleware
 *************************/
-app.use(async (err, req, res, next) => {
-  let nav = await utilities.getNav()
-  console.error(`Error at: "${req.originalUrl}": ${err.message}`)
-  res.render("errors/error", {
-    title: err.status || 'Server Error',
-    message: err.message,
-    nav
-  })
-})
+// app.use(async (err, req, res, next) => {
+//   let nav = await utilities.getNav()
+//   console.error(`Error at: "${req.originalUrl}": ${err.message}`)
+//   res.render("errors/error", {
+//     title: err.status || 'Server Error',
+//     message: err.message,
+//     nav
+//   })
+// })
+
+// 404 errors
+app.use(baseController.handle404); 
+
+// server error
+app.use(baseController.handleErrors); 
 
 
 

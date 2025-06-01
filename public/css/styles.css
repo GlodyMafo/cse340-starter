@@ -24,22 +24,39 @@ body {
   color: #252525;
 }
 
-.navigation ul {
+nav {
+  background-color: #1a1a1a;
+  padding: 0.5rem 1rem;
+}
+
+nav ul {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: #252525;
-  padding: 10px 0;
-  gap: 10px;
-  margin: 0;
-  padding-left: 0;
-}
-
-.navigation ul li {
-  color: white;
+  flex-wrap: wrap;
   list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 1rem;
+  justify-content: center;
 }
 
+nav li {
+  margin: 0;
+}
+
+nav a {
+  display: block;
+  color: #ffffff;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+nav a:hover,
+nav a:focus {
+  background-color: white;
+  color:#1a1a1a;
+}
 .hero {
   display: flex;
   flex-direction: column;
@@ -105,6 +122,96 @@ figure {
 .item-img img {
   max-height: 50px;
 }
+
+/* classification */
+
+#inv-display {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0;
+}
+
+#inv-display li {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #fff;
+  transition: box-shadow 0.3s ease;
+}
+
+#inv-display li:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#inv-display img {
+  width: 100%;
+  height: 180px; 
+  object-fit: cover;
+  display: block;
+}
+
+
+.namePrice {
+  padding: 1rem;
+  text-align: center;
+}
+
+.namePrice hr {
+  margin: 0.5rem 0;
+  border: none;
+  border-top: 1px solid #ccc;
+}
+
+.namePrice h2 {
+  font-size: 1.2rem;
+  margin: 0.5rem 0;
+}
+
+.namePrice h2 a {
+  text-decoration: none;
+  color: #333;
+}
+
+.namePrice h2 a:hover {
+  color: #007BFF;
+}
+
+.namePrice span {
+  display: block;
+  font-weight: bold;
+  color: #28a745;
+  margin-top: 0.5rem;
+}
+
+.notice {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #888;
+  padding: 2rem;
+}
+
+
+
+/* detail */
+.vehicle-detail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.vehicle-detail img {
+  flex: 1 1 300px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.vehicle-detail div {
+  flex: 1 1 300px;
+}
+
 
 /* ========== MEDIA QUERY FOR LARGE SCREENS ========== */
 @media screen and (min-width: 768px) {

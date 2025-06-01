@@ -56,6 +56,21 @@ Util.buildClassificationGrid = async function(data){
 }
 
 
+Util.buildDetailHtml = function (vehicle) {
+  return `
+    <section class="vehicle-detail">
+      <img src="${vehicle.inv_image}" alt="${vehicle.inv_make} ${vehicle.inv_model}">
+      <div>
+        <h2>${vehicle.inv_year} ${vehicle.inv_make} ${vehicle.inv_model}</h2>
+        <p><strong>Price:</strong> $${Number(vehicle.inv_price).toLocaleString()}</p>
+        <p><strong>Miles:</strong> ${Number(vehicle.inv_miles).toLocaleString()} miles</p>
+        <p><strong>Description:</strong> ${vehicle.inv_description}</p>
+        <p><strong>Color:</strong> ${vehicle.inv_color}</p>
+      </div>
+    </section>
+  `;
+}
+
 /* ****************************************
  * Middleware For Handling Errors
  * Wrap other function in this for 
