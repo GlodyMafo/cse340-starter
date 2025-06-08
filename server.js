@@ -45,11 +45,16 @@ app.use(async (req, res, next) => {
 /* ***********************
  * Middleware session
  * ************************/
-app.use(session({
+ app.use(session({
+  store: new (require('connect-pg-simple')(session))({
+    createTableIfMissing: true,
+    pool,
+  }),
   secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: true
-}));
+  resave: true,
+  saveUninitialized: true,
+  name: 'sessionId',
+}))
 
 
 // Express Messages Middleware
