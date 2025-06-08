@@ -215,7 +215,7 @@ figure {
 
 /* Form */
 
-.account {
+.form-base {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -301,12 +301,43 @@ button:hover {
   box-sizing: border-box;
 }
 
+.flash-message ul{
+  list-style: none;
+}
+
 input:required:invalid, input:focus:invalid {
 border-color: #f44336;
 }
 
 input:required:valid {
 background-color: rgba(0, 128, 0, 0.155)
+}
+
+.management {
+  text-align: center;
+}
+
+.management ul{
+  list-style: none;
+  display: flex ;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.management a {
+  text-decoration: none;
+  border: 1px solid #00c3ff;
+  padding-block: 8px;
+  padding-inline: 10px;
+  border-radius: 50px;
+  color: #00c3ff;
+  margin-left: 10px;
+}
+
+.management a:hover{
+  background-color: #007BFF;
+  color: white;
+
 }
 
 /* ========== MEDIA QUERY FOR LARGE SCREENS ========== */
