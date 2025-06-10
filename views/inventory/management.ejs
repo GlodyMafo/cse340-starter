@@ -1,15 +1,28 @@
-
-
 <main class="management">
   <h1>Inventory Management</h1>
 
+
   <% if (message) { %>
-    <div class="message"><%= message %></div>
+  <div class="message"><%= message %></div>
   <% } %>
 
   <ul>
     <li><a href="/inv/add-classification">Add New Classification</a></li>
     <li><a href="/inv/add-inventory">Add New Inventory</a></li>
   </ul>
+
+    <h2>Manage Inventory</h2>
+
+    <p>
+      Please select a classification from the list below to view the items that
+      belong to that classification.
+    </p>
+
+      <%= classificationSelect %>
+
+      <table id="inventoryDisplay"></table>
+
+      <noscript>JavaScript must be enabled to use this page.</noscript>
 </main>
 
+<script src="../../js/inventory.js"></script>

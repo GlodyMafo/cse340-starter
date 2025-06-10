@@ -2,6 +2,7 @@ const express = require("express")
 const router = new express.Router() 
 const invController = require("../controllers/invController")
 const invValidate = require("../utilities/inv-validation")
+const utilities = require("../utilities/")
 
 
 // Classification
@@ -14,6 +15,9 @@ router.get('/detail/:inv_id', invController.buildDetailView);
 //inventory management
 
 router.get("/", invController.buildManagement);
+
+router.get("/getInventory/:classification_id", utilities.handleErrors(invController.getInventoryJSON))
+
 
 // Add Classification Form View
 router.get("/add-classification", invController.buildAddClassification)
