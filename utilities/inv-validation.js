@@ -57,10 +57,54 @@ const checkInventoryData = async (req, res, next) => {
   next()
 }
 
+const checkUpdateData = async (req, res, next) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav()
+    let classifications = await invModel.getClassifications()
+    
+    // Extract the fields from the request body to send back to the form
+    const {
+      inv_id,
+      inv_make,
+      inv_model,
+      inv_description,
+      inv_image,
+      inv_thumbnail,
+      inv_price,
+      inv_year,
+      inv_miles,
+      inv_color,
+      classification_id
+    } = req.body
+    
+    res.status(400).render("inventory/edit-inventory", {
+      title: `Edit ${inv_make} ${inv_model}`,
+      nav,
+      classificationSelect: classifications,
+      errors: errors.array(),
+      inv_id,
+      inv_make,
+      inv_model,
+      inv_description,
+      inv_image,
+      inv_thumbnail,
+      inv_price,
+      inv_year,
+      inv_miles,
+      inv_color,
+      classification_id
+    })
+    return
+  }
+  next()
+}
+
 
 module.exports = {
   classificationRules,
   checkClassificationData,
   checkInventoryData,
-  inventoryRules
+  inventoryRules,
+  checkUpdateData
 }

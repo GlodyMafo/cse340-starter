@@ -16,7 +16,17 @@ router.get('/detail/:inv_id', invController.buildDetailView);
 
 router.get("/", invController.buildManagement);
 
-router.get("/getInventory/:classification_id", utilities.handleErrors(invController.getInventoryJSON))
+router.get("/getInventory/:classification_id", utilities.handleErrors(invController.getInventoryJSON));
+
+
+// Show delete confirmation view
+router.get("/delete/:inv_id", invController.buildDeleteView);
+
+// Perform delete operation
+router.post("/delete", invController.deleteInventoryItem);
+
+
+
 
 
 // Add Classification Form View
@@ -41,6 +51,20 @@ router.post(
   invValidate.checkInventoryData,
   invController.addInventory
 )
+
+
+// Route to build the edit inventory view
+
+router.get("/edit/:inv_id", utilities.handleErrors(invController.editInventoryView));
+
+// Add this inside your router
+router.post("/update/", invController.updateInventory)
+
+router.post(
+  "/update/",
+  invValidate.checkUpdateData, // or similar rules for validation
+  invController.updateInventory
+);
 
 //intentional error
 

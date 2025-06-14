@@ -6,7 +6,7 @@ const regValidate = require('../utilities/account-validation')
 
 
 // Default route attached to "/account"
-router.get('/', accountController.getAccountManagementView);
+router.get('/', utilities.checkLogin, accountController.getAccountManagementView);
 
 // Route to login view
 router.get("/login", utilities.handleErrors(accountController.buildLogin))
@@ -23,6 +23,7 @@ router.post(
 )
 
 // Process the login request using validation and controller logic
+// Process the login request
 router.post(
   "/login",
   regValidate.loginRules(),

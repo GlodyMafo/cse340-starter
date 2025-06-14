@@ -108,7 +108,9 @@ async function accountLogin(req, res) {
       } else {
         res.cookie("jwt", accessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 })
       }
+      console.log("Cookie JWT sent ✅")
       return res.redirect("/account/")
+      
     }
     else {
       req.flash("message notice", "Please check your credentials and try again.")
@@ -122,6 +124,7 @@ async function accountLogin(req, res) {
   } catch (error) {
     throw new Error('Access Forbidden')
   }
+
 }
 
 
