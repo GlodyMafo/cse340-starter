@@ -4,10 +4,9 @@ const invController = require("../controllers/invController")
 const invValidate = require("../utilities/inv-validation")
 const utilities = require("../utilities/")
 
-
 // Classification
 
-router.get("/type/:classificationId", invController.buildByClassificationId);
+router.get("/type/:classificationId", utilities.restrictInventoryAccess, invController.buildByClassificationId);
 
 // detail
 router.get('/detail/:inv_id', invController.buildDetailView);
@@ -20,7 +19,7 @@ router.get("/getInventory/:classification_id", utilities.handleErrors(invControl
 
 
 // Show delete confirmation view
-router.get("/delete/:inv_id", invController.buildDeleteView);
+router.get("/delete/:inv_id", utilities.restrictInventoryAccess, invController.buildDeleteView);
 
 // Perform delete operation
 router.post("/delete", invController.deleteInventoryItem);
@@ -30,11 +29,11 @@ router.post("/delete", invController.deleteInventoryItem);
 
 
 // Add Classification Form View
-router.get("/add-classification", invController.buildAddClassification)
+router.get("/add-classification", utilities.restrictInventoryAccess, invController.buildAddClassification)
 
 // Process Add Classification Form
 router.post(
-  "/add-classification",
+  "/add-classification", 
   invValidate.classificationRules(),
   invValidate.checkClassificationData,
   invController.addClassification
@@ -42,7 +41,7 @@ router.post(
 
 
 // Add Inventory Item Form View
-router.get("/add-inventory", invController.buildAddInventory)
+router.get("/add-inventory", utilities.restrictInventoryAccess, invController.buildAddInventory)
 
 // Handle Add Inventory Item POST
 router.post(
@@ -55,10 +54,10 @@ router.post(
 
 // Route to build the edit inventory view
 
-router.get("/edit/:inv_id", utilities.handleErrors(invController.editInventoryView));
+router.get("/edit/:inv_id", utilities.restrictInventoryAccess, utilities.handleErrors(invController.editInventoryView));
 
 // Add this inside your router
-router.post("/update/", invController.updateInventory)
+router.post("/update/", utilities.restrictInventoryAccess, invController.updateInventory)
 
 router.post(
   "/update/",

@@ -93,4 +93,67 @@ validate.checkLoginData = async (req, res, next) => {
   next();
 };
 
+/* Account Update Validation */
+validate.accountUpdateRules = () => {
+  return [
+    body("firstname")
+      .trim()
+      .notEmpty()
+      .withMessage("First name is required"),
+    body("lastname")
+      .trim()
+      .notEmpty()
+      .withMessage("Last name is required"),
+    body("email")
+      .trim()
+      .isEmail()
+      .withMessage("Valid email is required")
+      .custom(async (email, { req }) => {
+        const accountId = req.body.account_id;
+        const existingAccount = await accountModel.getAccountByEmail(email);
+        if (existingAccount && existingAccount.account_id != accountId) {
+          throw new Error("Email already in use");
+        }
+      }),
+  ];
+};
+
+validate.checkAccountUpdate = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.render("accounts/update", {
+      errors: errors.array(),
+      account: req.body,
+      message: null,
+    });
+  }
+  next();
+};
+
+/* Password Change Validation */
+validate.passwordChangeRules = () => {
+  return [
+    body("password")
+      .optional({ checkFalsy: true })
+      .isLength({ min: 8 })
+      .withMessage("Password must be at least 8 characters")
+      .matches(/[0-9]/)
+      .withMessage("Password must contain a number")
+      .matches(/[a-zA-Z]/)
+      .withMessage("Password must contain a letter"),
+  ];
+};
+
+validate.checkPasswordChange = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.render("accounts/update", {
+      errors: errors.array(),
+      account: { account_id: req.body.account_id },
+      message: null,
+    });
+  }
+  next();
+};
+
 module.exports = validate;

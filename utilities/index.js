@@ -112,23 +112,55 @@ Util.handleErrors = fn => (req, res, next) => Promise.resolve(fn(req, res, next)
 * Middleware to check token validity
 **************************************** */
 Util.checkJWTToken = (req, res, next) => {
- if (req.cookies.jwt) {
-  jwt.verify(
-   req.cookies.jwt,
-   process.env.ACCESS_TOKEN_SECRET,
-   function (err, accountData) {
-    if (err) {
-     req.flash("Please log in")
-     res.clearCookie("jwt")
-     return res.redirect("/account/login")
-    }
-    res.locals.accountData = accountData
-    res.locals.loggedin = 1
+  if (req.cookies.jwt) {
+    jwt.verify(
+      req.cookies.jwt,
+      process.env.ACCESS_TOKEN_SECRET,
+      function (err, accountData) {
+        if (err) {
+          req.flash('error', 'Please log in')
+          res.clearCookie('jwt')
+          return res.redirect('/account/login')
+        }
+        res.locals.account = accountData
+        res.locals.loggedin = 1
+        next()
+      }
+    )
+  } else {
+    res.locals.account = null
+    res.locals.loggedin = 0
     next()
-   })
- } else {
-  next()
- }
+  }
 }
+
+Util.restrictInventoryAccess = function (req, res, next) {
+  const token = req.cookies.token;
+  if (!token) {
+    return res.render('account/login', {
+      title: 'Connexion',
+      message: 'You must be logged in to access this page.'
+    });
+  }
+  try {
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    if (payload.accountType === 'Employee' || payload.accountType === 'Admin') {
+      res.locals.user = payload;
+      return next();
+    } else {
+      return res.render('account/login', {
+        title: 'Connexion',
+        message: 'Insufficient permissions.'
+      });
+    }
+  } catch (err) {
+    return res.render('account/login', {
+      title: 'Connexion',
+      message: 'Invalid token. Please log in again.'
+    });
+  }
+}
+
+
 
 module.exports = Util

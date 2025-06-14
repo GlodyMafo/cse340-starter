@@ -1,0 +1,42 @@
+<h1>Update Account Information</h1>
+
+<% if (errors && errors.length) { %>
+  <ul class="errors">
+    <% errors.forEach(error => { %>
+      <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+<% } %>
+
+<% if (message) { %>
+  <p class="message"><%= message %></p>
+<% } %>
+
+<!-- Account Update Form -->
+<form method="POST" action="/accounts/update-account">
+  <input type="hidden" name="account_id" value="<%= account.account_id %>" />
+  
+  <label for="firstname">First Name</label>
+  <input type="text" id="firstname" name="firstname" required value="<%= account.firstname %>" />
+  
+  <label for="lastname">Last Name</label>
+  <input type="text" id="lastname" name="lastname" required value="<%= account.lastname %>" />
+  
+  <label for="email">Email</label>
+  <input type="email" id="email" name="email" required value="<%= account.email %>" />
+  
+  <input type="submit" value="Update Account" />
+</form>
+
+<hr />
+
+<!-- Change Password Form -->
+<form method="POST" action="/accounts/change-password">
+  <input type="hidden" name="account_id" value="<%= account.account_id %>" />
+  
+  <label for="password">New Password</label>
+  <input type="password" id="password" name="password" placeholder="Enter new password" />
+  <small>Password must be at least 8 characters and contain letters and numbers.</small>
+  
+  <input type="submit" value="Change Password" />
+</form>

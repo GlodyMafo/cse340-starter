@@ -142,4 +142,87 @@ async function getAccountManagementView (req, res) {
 };
 
 
-module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, getAccountManagementView};
+function showAccountManagement(req, res) {
+  const user = res.locals.user; // from middleware
+
+  res.render('accounts/manage', {
+    firstname: user.firstname,
+    accountType: user.accountType,
+    accountId: user.accountId,
+  });
+}
+
+
+async function showUpdateView(req, res) {
+  try {
+    const accountId = req.params.accountId;
+    const account = await accountModel.getAccountById(accountId);
+    if (!account) {
+      return res.redirect('/accounts/manage');
+    }
+    res.render('accounts/update', { account, errors: [], message: null });
+  } catch (error) {
+    res.status(500).send('Server error');
+  }
+}
+
+async function updateAccountInfo(req, res) {
+  const { account_id, firstname, lastname, email } = req.body;
+
+  try {
+    const updateResult = await accountModel.updateAccountInfo(account_id, firstname, lastname, email);
+    let message = updateResult ? 'Account updated successfully' : 'Account update failed';
+
+    // fetch updated account info for display in manage view
+    const account = await accountModel.getAccountById(account_id);
+
+    res.render('accounts/manage', {
+      firstname: account.firstname,
+      accountType: account.accountType,
+      accountId: account.account_id,
+      message,
+    });
+  } catch (error) {
+    res.render('accounts/update', {
+      errors: [{ msg: 'Failed to update account info' }],
+      account: req.body,
+      message: null,
+    });
+  }
+}
+
+async function changePassword(req, res) {
+  const { account_id, password } = req.body;
+
+  if (!password) {
+    return res.render('accounts/update', {
+      errors: [{ msg: 'Password is required' }],
+      account: { account_id },
+      message: null,
+    });
+  }
+
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const updateResult = await accountModel.updatePassword(account_id, hashedPassword);
+    let message = updateResult ? 'Password changed successfully' : 'Password change failed';
+
+    const account = await accountModel.getAccountById(account_id);
+
+    res.render('accounts/manage', {
+      firstname: account.firstname,
+      accountType: account.accountType,
+      accountId: account.account_id,
+      message,
+    });
+  } catch (error) {
+    res.render('accounts/update', {
+      errors: [{ msg: 'Failed to change password' }],
+      account: { account_id },
+      message: null,
+    });
+  }
+}
+
+
+module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, getAccountManagementView, showAccountManagement, showUpdateView, updateAccountInfo, changePassword };
